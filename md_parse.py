@@ -53,7 +53,6 @@ def replace_url(article_path):
 		content = content.replace('https://img-blog.csdn.net/',PIC_SOURCE)
 
 		# 添加样式
-		# pattern = re.compile(r'http://p7tst3obo.bkt.clouddn.com/(.+?)\)')
 		pattern = re.compile(PIC_SOURCE+'(.+?)\)')
 		results = re.findall(pattern, content)
 		if len(results):
