@@ -11,8 +11,11 @@ CSDN2HEXO 是一款基于[CSDN开放平台](http://open.csdn.net/) 的 csdn blog
 
 ## 结果展示
 - 1、文章列表 
+
 	![文章列表](https://github.com/cyang812/CSDN2HEXO/raw/master/1.png)
+	
 - 2、文章内容 	
+
 	![博客内容](https://github.com/cyang812/CSDN2HEXO/raw/master/2.png)
 
 
