@@ -75,7 +75,7 @@ def save_article_lists(dict_content):
     if article_cnt%15:
         loop_cnt = int(article_cnt/15) + 1
     else:
-        loop_cnt = article_cnt/15    
+        loop_cnt = int(article_cnt/15)    
     # print('loop_cnt = ', loop_cnt) #迭代次数
 
     for x in range(1,loop_cnt+1):
