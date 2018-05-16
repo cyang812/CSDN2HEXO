@@ -36,7 +36,7 @@ def replace_url(article_path):
 	# 打开md文件
 	idx = 0
 	f1 = open(article_path, 'r', encoding='utf-8')
-	f2 = open('test.md', 'w', encoding='utf-8')
+	f2 = open('temp_name.md', 'w', encoding='utf-8')
 	for line in f1:
 		content = line
 		# print(content)
@@ -64,7 +64,7 @@ def replace_url(article_path):
 	f1.close()	
 	f2.close()
 	os.remove(article_path)
-	os.rename('test.md', article_path)
+	os.rename('temp_name.md', article_path)
 
 # 去除水印
 def delete_watermark(pics):
@@ -105,6 +105,59 @@ def get_lists_path(path):
 	# 	print(article_list[i])
 	return article_list
 
+# 在文章的 front-matter 处增加 thumbnail 缩略图
+def add_thumbnail(article_path, wrong_list):
+	# 打开md文件
+	f1 = open(article_path, 'r', encoding='utf-8')
+	content = f1.read()
+
+	# 处理部分文章 front-matter 错误
+	if content[0:4] == '---\n':
+		content = content[4:]
+		print(article_path)
+
+	f2 = open('temp_name.md', 'w', encoding='utf-8')
+
+	# 匹配正则 match ![]()
+	results = re.findall(r"!\[(.+?)\)", content)
+	if results:
+		print('res len = %d, %s'%(len(results),results[0]))
+		thumbnail_url = results[0].split('](')[1]
+		# print(thumbnail_url)
+
+		pos = '---'
+		thumbnail_content = 'thumbnail: ' + thumbnail_url + '\n' + pos + '\n'
+		content = content.replace(pos, thumbnail_content, 1) # 替换次数不超过一次
+	else:
+		print(article_path)
+		wrong_list.append(article_path)
+
+	f2.write(content)
+
+	f1.close()	
+	f2.close()
+	os.remove(article_path)
+	os.rename('temp_name.md', article_path)
+
+# 查找含有代码的文章，保存到列表 ```code```
+def find_code(article_path, code_list):
+	# 打开md文件
+	f1 = open(article_path, 'r', encoding='utf-8')
+	content = f1.read()
+
+	'''
+	正则表达式匹配代码
+	```language
+	any code
+	```
+	'''
+	results = re.findall(r"```", content)
+	if results:
+		print('res len = %d, %s'%(len(results),results[0]))
+		code_list.append(article_path)
+
+	f1.close()	
+
 def save_list_to_file(l_name, f_name):
     l_name = sorted(set(l_name), key = l_name.index)     
     # print('l_name = ', l_name)     
@@ -120,6 +173,8 @@ if __name__ == '__main__':
 	article_lists = get_lists_path('_posts')
 	print(len(article_lists))  
 
+	# 主要是替换文章中的图床
+	'''
 	# 从文件中获取图片链接保存到列表
 	pics_lists = list()
 	for i in range(0, len(article_lists)):
@@ -146,3 +201,23 @@ if __name__ == '__main__':
 	for article_list in article_lists:
 		print(article_list)
 		replace_url('_posts\\'+article_list)
+	'''
+	
+	'''
+	# 为每篇文章增加一个 thumbnail 缩略图
+	wrong_list = list()
+	# add_thumbnail('2.md', wrong_list)
+	for article_list in article_lists:
+		add_thumbnail('_posts\\'+article_list, wrong_list)
+
+	# 保存到文件
+	save_list_to_file(wrong_list, 'wrong_list.txt')
+	'''
+
+	# 查找含有代码的文章
+	code_list = list()
+	for article_list in article_lists:
+		find_code('_posts\\'+article_list, code_list)
+
+	# 保存到文件
+	save_list_to_file(code_list, 'code_list.txt')
