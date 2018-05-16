@@ -77,6 +77,10 @@ def delete_watermark(pics):
 
 # 下载图片
 def download_pic(url):
+	# 有的URL以//开头
+	if url.find("http") == -1:
+		url = "http:" + url
+
 	r = urllib.request.urlopen(url) 			  # directly access
 
 	content = r.read()
@@ -85,7 +89,11 @@ def download_pic(url):
 	else:
 		pic_type = '.png'
 
-	name = url.split('http://img.blog.csdn.net/')[1]+pic_type
+	# 图片名称考虑到外链和csdn站内两种URL
+	if url.rfind("img.blog.csdn.net") != -1 or url.rfind("img-blog.csdn.net") != -1:
+		name = url[url.rfind("/") + 1:] + pic_type
+	else:
+		name = url[url.rfind("/") + 1:url.rfind(".")] + pic_type
 	print('downloading ->',name)
 
 	file_path = os.path.join(name)
