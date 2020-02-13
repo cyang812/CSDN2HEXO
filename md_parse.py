@@ -6,10 +6,10 @@ import re
 import urllib.request
 
 # 图床
-PIC_SOURCE = ''
+PIC_SOURCE = 'https://blog-1252222443.cos.ap-chengdu.myqcloud.com/'
 
 # watermark
-PIC_STYLE = ''
+PIC_STYLE = '?watermark/2/text/Y3lhbmcudGVjaA==/fill/IzNEM0QzRA/fontsize/20/dissolve/50/gravity/SouthEast/dx/20/dy/20/batch/0/degree/0'
 
  # 查找图片
 def find_pics(article_path, pics):
@@ -27,6 +27,7 @@ def find_pics(article_path, pics):
         # 将图片加入到图片数组当中
         if len(temp_pic) == 2:
             pics.append(temp_pic[1])
+            # print(temp_pic[1])
 
     f.close()
     return pics
@@ -42,15 +43,18 @@ def replace_url(article_path):
 		# print(content)
 
 		# 去除水印链接
-		pattern = re.compile(r'\?watermark(.+?)\)')
+		# pattern = re.compile(r'\?watermark(.+?)\)')
+		# content = re.sub(pattern, ')', content)
+		pattern = re.compile(r'\?imageView2(.+?)\)')
 		content = re.sub(pattern, ')', content)
 		# print(content)
 
-		# 替换图床
-		# 第一种形式
-		content = content.replace('http://img.blog.csdn.net/',PIC_SOURCE)
-		# 第二种形式
-		content = content.replace('https://img-blog.csdn.net/',PIC_SOURCE)
+		# # 替换图床
+		# # 第一种形式
+		# content = content.replace('http://img.blog.csdn.net/',PIC_SOURCE)
+		# # 第二种形式
+		# content = content.replace('https://img-blog.csdn.net/',PIC_SOURCE)
+		content = content.replace('http://blog.cyang.top/',PIC_SOURCE)
 
 		# 添加样式
 		pattern = re.compile(PIC_SOURCE+'(.+?)\)')
@@ -69,10 +73,14 @@ def replace_url(article_path):
 # 去除水印
 def delete_watermark(pics):
 	for i in range(0, len(pics)):
+		'''
 		# 第一种形式的水印
 		pics[i] = pics[i].split('?watermark')[0]
 		# 第二种形式的水印
 		pics[i] = pics[i].replace('https://img-blog.csdn.net/','http://img.blog.csdn.net/')
+		'''
+		# 第一种形式的水印
+		pics[i] = pics[i].split('?imageView2')[0]
 
 
 # 下载图片
@@ -181,8 +189,8 @@ if __name__ == '__main__':
 	article_lists = get_lists_path('_posts')
 	print(len(article_lists))  
 
-	# 主要是替换文章中的图床
 	'''
+	# 主要是替换文章中的图床
 	# 从文件中获取图片链接保存到列表
 	pics_lists = list()
 	for i in range(0, len(article_lists)):
@@ -204,12 +212,12 @@ if __name__ == '__main__':
 		if 'blog' in pics_list:
 			print(pics_list)
 			download_pic(pics_list)
-
+	'''
+	
 	# 替换图床链接
 	for article_list in article_lists:
 		print(article_list)
 		replace_url('_posts\\'+article_list)
-	'''
 	
 	'''
 	# 为每篇文章增加一个 thumbnail 缩略图
@@ -222,6 +230,7 @@ if __name__ == '__main__':
 	save_list_to_file(wrong_list, 'wrong_list.txt')
 	'''
 
+	'''
 	# 查找含有代码的文章
 	code_list = list()
 	for article_list in article_lists:
@@ -229,3 +238,4 @@ if __name__ == '__main__':
 
 	# 保存到文件
 	save_list_to_file(code_list, 'code_list.txt')
+	'''
