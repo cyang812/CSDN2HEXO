@@ -6,7 +6,7 @@ import re
 import urllib.request
 
 # 图床
-PIC_SOURCE = 'https://blog-1252222443.cos.ap-chengdu.myqcloud.com/'
+PIC_SOURCE = ''
 
 # watermark
 PIC_STYLE = '?watermark/2/text/Y3lhbmcudGVjaA==/fill/IzNEM0QzRA/fontsize/20/dissolve/50/gravity/SouthEast/dx/20/dy/20/batch/0/degree/0'
