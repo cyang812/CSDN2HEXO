@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+# @Author: cy101
+# @Date:   2020-02-18 22:18:14
+# @Last Modified by:   cyang
+# @Last Modified time: 2020-02-19 21:00:19
+
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import json
@@ -49,12 +55,12 @@ def replace_url(article_path):
 		content = re.sub(pattern, ')', content)
 		# print(content)
 
-		# # 替换图床
-		# # 第一种形式
-		# content = content.replace('http://img.blog.csdn.net/',PIC_SOURCE)
-		# # 第二种形式
-		# content = content.replace('https://img-blog.csdn.net/',PIC_SOURCE)
-		content = content.replace('http://blog.cyang.top/',PIC_SOURCE)
+		# 替换图床
+		# 第一种形式
+		content = content.replace('http://img.blog.csdn.net/',PIC_SOURCE)
+		# 第二种形式
+		content = content.replace('https://img-blog.csdn.net/',PIC_SOURCE)
+		# content = content.replace('http://blog.cyang.top/',PIC_SOURCE)
 
 		# 添加样式
 		pattern = re.compile(PIC_SOURCE+'(.+?)\)')
@@ -73,14 +79,14 @@ def replace_url(article_path):
 # 去除水印
 def delete_watermark(pics):
 	for i in range(0, len(pics)):
-		'''
+		
 		# 第一种形式的水印
 		pics[i] = pics[i].split('?watermark')[0]
 		# 第二种形式的水印
 		pics[i] = pics[i].replace('https://img-blog.csdn.net/','http://img.blog.csdn.net/')
-		'''
+		
 		# 第一种形式的水印
-		pics[i] = pics[i].split('?imageView2')[0]
+		# pics[i] = pics[i].split('?imageView2')[0]
 
 
 # 下载图片
@@ -155,6 +161,51 @@ def add_thumbnail(article_path, wrong_list):
 	os.remove(article_path)
 	os.rename('temp_name.md', article_path)
 
+categories_type = [
+	'', 	   #0
+	'STM32',   #1
+	'C语言',    #2
+	'树莓派',   #3
+	'手机',     #4
+	'解决方案', #5
+	'记录',     #6
+]
+
+# 在文章的 front-matter 处修改分类
+def modify_categories(article_path):
+	# 打开md文件
+	f1 = open(article_path, 'r', encoding='utf-8')
+	content = f1.read()
+
+	# 处理部分文章 front-matter 错误
+	if content[0:4] == '---\n':
+		content = content[4:]
+		print(article_path)
+
+	f2 = open('temp_name.md', 'w', encoding='utf-8')
+
+	pos = "categories:\n- "
+	results = re.findall(pos, content)
+	if results:
+		try:
+			num = int(input(r'input the type: '))	
+		except Exception as e:
+			num = 0		
+
+		categories_content = pos + categories_type[num]
+		content = content.replace(pos, categories_content, 1) # 替换次数不超过一次
+	else:
+		print("modify_categories wrong:" + article_path)
+		# wrong_list.append(article_path)
+
+	f2.write(content)
+
+	f1.close()	
+	f2.close()
+	os.remove(article_path)
+	os.rename('temp_name.md', article_path)
+
+
 # 查找含有代码的文章，保存到列表 ```code```
 def find_code(article_path, code_list):
 	# 打开md文件
@@ -215,10 +266,16 @@ if __name__ == '__main__':
 	'''
 	
 	# 替换图床链接
+	# for article_list in article_lists:
+	# 	print(article_list)
+	# 	replace_url('_posts\\'+article_list)
+	
+	# 手动输入分类
 	for article_list in article_lists:
 		print(article_list)
-		replace_url('_posts\\'+article_list)
-	
+		modify_categories('_posts\\'+article_list)
+		
+
 	'''
 	# 为每篇文章增加一个 thumbnail 缩略图
 	wrong_list = list()
