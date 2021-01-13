@@ -3,11 +3,15 @@
 CSDN2HEXO 是一款基于[CSDN开放平台](http://open.csdn.net/) 的 csdn blog 内容下载器， 可以下载博客中的文章内容和图片，文章保存为 markdown 格式，图片可下载无水印图片，并根据文章标题生成文件夹存储相关数据。
 
 ## 用法
-- 1、首先需要获得开发者认证，并创建应用，获取到 App_key 和 App_secret 以通过 OAuth2 认证，可[在此获取](http://open.csdn.net/apps/createapp)
+~~- 1、首先需要获得开发者认证，并创建应用，获取到 App_key 和 App_secret 以通过 OAuth2 认证，可[在此获取](http://open.csdn.net/apps/createapp)~~
 
-- 2、将 App_key，App_secret，CSDN_username，CSDN_secret 填入 `csdn_sdk.py` 文件开头处
+~~- 2、将 App_key，App_secret，CSDN_username，CSDN_secret 填入 `csdn_sdk.py` 文件开头处~~
 
-- 3、运行 `csdn-spider.py`
+~~- 3、运行 `csdn-spider.py`~~
+
+- get_article_list.py
+- get_article_md.py
+- md_parse.py
 
 ## 结果展示
 - 1、文章列表 
